@@ -7,7 +7,7 @@ export default function RegisterPage() {
         <section className="hidden lg:flex flex-col justify-between p-10 border-r border-white/10 bg-linear-to-br from-white/3 to-transparent">
           <div>
             <div className="text-xl font-semibold tracking-tight">
-              LinkForge<span className="text-blue-500">.</span>
+              LinkPilot<span className="text-blue-500">.</span>
             </div>
             <h2 className="mt-8 text-4xl font-semibold leading-tight">
               Start building smarter links.
@@ -29,7 +29,7 @@ export default function RegisterPage() {
         <section className="p-6 sm:p-10">
           <div className="max-w-md mx-auto">
             <div className="text-xl font-semibold tracking-tight mb-8">
-              LinkForge<span className="text-blue-500">.</span>
+              LinkPilot<span className="text-blue-500">.</span>
             </div>
             <h1 className="text-3xl font-semibold">Create Account</h1>
             <p className="mt-2 text-gray-400">

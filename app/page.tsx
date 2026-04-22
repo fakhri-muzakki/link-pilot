@@ -4,7 +4,7 @@ export default function LandingPage() {
       {/* Navbar */}
       <header className="flex items-center justify-between px-6 py-5 border-b border-white/10">
         <div className="text-lg font-semibold tracking-tight">
-          LinkForge<span className="text-blue-500">.</span>
+          LinkPilot<span className="text-blue-500">.</span>
         </div>
         <nav className="flex gap-6 text-sm text-gray-400">
           <a href="/login" className="hover:text-white">
@@ -97,7 +97,7 @@ export default function LandingPage() {
 
       {/* Footer */}
       <footer className="border-t border-white/10 py-8 text-center text-gray-500 text-sm">
-        © {new Date().getFullYear()} LinkForge. All rights reserved.
+        © {new Date().getFullYear()} LinkPilot. All rights reserved.
       </footer>
     </main>
   );
