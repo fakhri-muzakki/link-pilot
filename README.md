@@ -1,36 +1,127 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 Link Shortener & QR Generator (Frontend)
 
-## Getting Started
+Aplikasi web modern untuk membuat short link dan QR code secara praktis. Dibangun dengan **Next.js App Router** dan fokus pada pengalaman pengguna yang cepat, minimal, dan responsif.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## ✨ Features
+
+- 🔗 Short URL management
+- 🎯 Custom alias
+- 📊 Analytics dashboard (charts)
+- 📷 QR code preview & download
+- 🔍 Search & filter links
+- ⚡ Optimistic UI (instant update)
+- 🔐 Authentication via Supabase
+
+---
+
+## 🧱 Tech Stack
+
+- **Framework**: Next.js 15 (App Router)
+- **UI**: Tailwind CSS + custom dark SaaS theme
+- **Form Handling**: React Hook Form + Valibot
+- **State**: React (local state)
+- **Charts**: Recharts
+- **Icons**: Lucide React
+- **Auth**: Supabase
+- **Notifications**: React Hot Toast
+
+---
+
+## 📁 Project Structure
+
+```
+app/
+ ├── (auth)/
+ ├── links/
+ │   ├── page.tsx
+ │   ├── components/
+ │   ├── schema/
+ │   └── type/
+ ├── analytics/
+ ├── components/
+ └── lib/
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## ⚙️ Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Buat file `.env.local`:
 
-## Learn More
+```
+NEXT_PUBLIC_API_URL=http://192.168.18.11:3000
+NEXT_PUBLIC_BASE_URL=http://localhost:3000
 
-To learn more about Next.js, take a look at the following resources:
+NODE_ENV="development"
+DATABASE_URL=""
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🚀 Getting Started
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+npm install
+npm run dev
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 🔗 API Integration
+
+Frontend terhubung ke backend melalui REST API:
+
+- `GET /api/links`
+- `POST /api/links`
+- `PUT /api/links/:id`
+- `GET /api/links/search`
+- `GET /api/analytics/:id`
+
+---
+
+## 🎨 UI Design
+
+- Dark SaaS Minimal theme
+- Fokus pada readability & spacing
+- Micro interaction (hover, transition)
+- Modal-based interaction (create/edit/detail)
+
+---
+
+## 📸 Preview
+
+Tambahkan screenshot di folder `/public`:
+
+```
+/public
+ ├── preview.png
+ ├── links.png
+ ├── analytics.png
+ ├── modal.png
+```
+
+---
+
+## 🚀 Deployment
+
+Deploy dengan:
+
+- Vercel (recommended)
+
+---
+
+## 💡 Notes
+
+Project ini dibuat untuk:
+
+- Portfolio backend & frontend integration
+- Latihan real-world system (bukan sekadar CRUD)
+- Simulasi produk seperti Bitly
+
+---

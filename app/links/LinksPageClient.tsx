@@ -1,21 +1,47 @@
 "use client";
 
-import { useState } from "react";
-import { Plus, Search, LogOut } from "lucide-react";
+import { useEffect, useState } from "react";
 
 import LinkFormModal from "./components/LinkFormModal";
 import type { LinkItem as LinkItemType } from "./type";
 import type { LinkFormData } from "./schema";
 import LinkItem from "./components/LinkItem";
 import LinkDetailModal from "./components/LinkDetailModal";
+import { createClient } from "@/lib/supabase/client";
+import type { Session } from "@supabase/supabase-js";
+import SearchForm from "./components/SearchForm";
+import Navbar from "../components/Navbar";
 
 interface LinksPageProps {
   links: LinkItemType[];
   statsSection: React.ReactNode;
 }
 
-export default function LinksPage({ links, statsSection }: LinksPageProps) {
-  const [openMenu, setOpenMenu] = useState<number | null>(null);
+export default function LinksPage({
+  links: initialData,
+  statsSection,
+}: LinksPageProps) {
+  const [links, setLinks] = useState<LinkItemType[]>(initialData);
+  const [openMenu, setOpenMenu] = useState<string | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
+
+  useEffect(() => {
+    const getSession = async () => {
+      const supabase = createClient();
+
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (!session) {
+        throw new Error("");
+      }
+
+      setSession(session);
+    };
+
+    getSession();
+  }, []);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<"create" | "edit">("create");
@@ -46,16 +72,68 @@ export default function LinksPage({ links, statsSection }: LinksPageProps) {
   };
 
   const handleSubmit = async (values: LinkFormData): Promise<void> => {
-    console.log("submit:", values);
-
+    if (!session) return;
     // create mode
     if (modalMode === "create") {
       // call POST /links
+      const supabase = createClient();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (!session) {
+        throw new Error("Session is not found");
+      }
+
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/links`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title: values.title,
+          original_url: values.originalUrl,
+          custom_alias: values.customAlias || "",
+        }),
+      });
+
+      if (!res) {
+        throw new Error("Error pada saat fetch");
+      }
+
+      const json = await res.json();
+
+      setLinks((prev) => [json.data, ...prev]);
     }
 
     // edit mode
-    if (modalMode === "edit") {
-      // call PATCH /links/:id
+    if (modalMode === "edit" && selectedLink) {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/links/${selectedLink.id}`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${session.access_token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            title: values.title,
+            original_url: values.originalUrl,
+            custom_alias: values.customAlias || "",
+          }),
+        },
+      );
+
+      if (!res) {
+        throw new Error("Error pada saat fetch");
+      }
+
+      setLinks((prev) =>
+        prev.map((p) => {
+          return p.id == selectedLink.id ? { ...p, ...values } : p;
+        }),
+      );
     }
 
     setModalOpen(false);
@@ -65,28 +143,7 @@ export default function LinksPage({ links, statsSection }: LinksPageProps) {
     <>
       <main className="min-h-screen bg-[#0a0a0a] text-white">
         {/* Navbar */}
-        <header className="sticky top-0 z-20 border-b border-white/10 bg-[#0a0a0a]/80 backdrop-blur-md">
-          <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
-            <div className="text-xl font-semibold tracking-tight">
-              LinkPilot<span className="text-blue-500">.</span>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <button
-                onClick={openCreateModal}
-                className="inline-flex items-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-700 px-4 py-2 text-sm font-medium transition"
-              >
-                <Plus size={16} />
-                New Link
-              </button>
-
-              <button className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 px-4 py-2 text-sm transition">
-                <LogOut size={16} />
-                Logout
-              </button>
-            </div>
-          </div>
-        </header>
+        <Navbar openCreateModal={openCreateModal} />
 
         {/* Content */}
         <section className="max-w-7xl mx-auto px-6 py-8">
@@ -99,16 +156,7 @@ export default function LinksPage({ links, statsSection }: LinksPageProps) {
               </p>
             </div>
 
-            <div className="relative w-full md:w-80">
-              <Search
-                size={16}
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"
-              />
-              <input
-                placeholder="Search links..."
-                className="w-full rounded-xl bg-[#111111] border border-white/10 pl-11 pr-4 py-3 outline-none focus:border-blue-500 transition"
-              />
-            </div>
+            <SearchForm session={session} setLinks={setLinks} />
           </div>
 
           {statsSection}
@@ -119,6 +167,7 @@ export default function LinksPage({ links, statsSection }: LinksPageProps) {
               <LinkItem
                 key={item.id}
                 item={item}
+                setLinks={setLinks}
                 openEditModal={openEditModal}
                 openMenu={openMenu}
                 openDetail={openDetail}

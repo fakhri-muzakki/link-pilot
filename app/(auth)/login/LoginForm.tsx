@@ -3,6 +3,8 @@
 import { useForm } from "react-hook-form";
 import { valibotResolver } from "@hookform/resolvers/valibot";
 import { loginSchema, type LoginData } from "./schema";
+import { createClient } from "@/lib/supabase/client";
+import { redirect } from "next/navigation";
 
 const LoginForm = () => {
   const {
@@ -17,8 +19,14 @@ const LoginForm = () => {
     },
   });
 
-  const onSubmit = async (values: LoginData) => {
-    console.log(values);
+  const onSubmit = async (payload: LoginData) => {
+    const supabase = createClient();
+    await supabase.auth.signInWithPassword({
+      email: payload.email,
+      password: payload.password,
+    });
+
+    redirect("/links");
   };
 
   return (

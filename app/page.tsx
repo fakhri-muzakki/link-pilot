@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function LandingPage() {
   return (
     <main className="min-h-screen bg-[#0a0a0a] text-white">
@@ -7,12 +9,12 @@ export default function LandingPage() {
           LinkPilot<span className="text-blue-500">.</span>
         </div>
         <nav className="flex gap-6 text-sm text-gray-400">
-          <a href="/login" className="hover:text-white">
+          <Link prefetch={true} href="/login" className="hover:text-white">
             Login
-          </a>
-          <a href="/register" className="hover:text-white">
+          </Link>
+          <Link prefetch={true} href="/register" className="hover:text-white">
             Register
-          </a>
+          </Link>
         </nav>
       </header>
 

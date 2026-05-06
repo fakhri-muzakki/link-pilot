@@ -9,7 +9,7 @@ export const loginSchema = v.object({
   password: v.pipe(
     v.string(),
     v.nonEmpty("Password is required"),
-    v.minLength(8, "Minimum 8 characters"),
+    v.minLength(6, "Minimum 6 characters"),
   ),
 });
 

@@ -3,6 +3,8 @@
 import { Download, ExternalLink, X, Copy } from "lucide-react";
 import type { LinkItem } from "../type";
 import Image from "next/image";
+import { useBaseUrl } from "@/hooks/useBaseUrl";
+import toast from "react-hot-toast";
 
 type LinkDetailModalProps = {
   open: boolean;
@@ -15,10 +17,12 @@ export default function LinkDetailModal({
   onClose,
   data,
 }: LinkDetailModalProps) {
+  const baseUrl = useBaseUrl();
   if (!open || !data) return null;
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(data.slug);
+    await navigator.clipboard.writeText(`${baseUrl}/r/${data.slug}`);
+    toast.success("Copied!");
   };
 
   const handleDownload = async () => {
@@ -36,6 +40,7 @@ export default function LinkDetailModal({
       URL.revokeObjectURL(blobUrl);
     } catch (error) {
       console.error("Download failed:", error);
+      toast.error("Gagal mendownload QR code"); // ← dan error state-nya
     }
   };
 
@@ -83,7 +88,7 @@ export default function LinkDetailModal({
 
               <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 flex items-center justify-between gap-3">
                 <span className="text-blue-400 truncate text-sm">
-                  {data.slug}
+                  {`${baseUrl}/r/${data.slug}`}
                 </span>
 
                 <button

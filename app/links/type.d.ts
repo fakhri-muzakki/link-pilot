@@ -1,5 +1,5 @@
 export type LinkItem = {
-  id: number;
+  id: string;
   title: string;
   slug: string;
   clicks: number;

@@ -1,4 +1,3 @@
-// app/api/download-image/route.ts
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const imageUrl = searchParams.get("url");

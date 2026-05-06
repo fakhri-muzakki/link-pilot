@@ -7,23 +7,45 @@ import {
   Trash2,
 } from "lucide-react";
 import MenuItem from "./MenuItem";
-import type { LinkItem } from "../type";
+// import type { LinkItem } from "../type";
+import { useBaseUrl } from "@/hooks/useBaseUrl";
+import type { LinkItem as LinkItemType } from "../type";
+import Link from "next/link";
 
 type LinkItemProps = {
-  item: LinkItem;
-  setOpenMenu: React.Dispatch<React.SetStateAction<number | null>>;
-  openMenu: number | null;
-  openEditModal: (link: LinkItem) => Promise<void>;
-  openDetail: (link: LinkItem) => Promise<void>;
+  item: LinkItemType;
+  setOpenMenu: React.Dispatch<React.SetStateAction<string | null>>;
+  openMenu: string | null;
+  setLinks: React.Dispatch<React.SetStateAction<LinkItemType[]>>;
+  openEditModal: (link: LinkItemType) => Promise<void>;
+  openDetail: (link: LinkItemType) => Promise<void>;
 };
 
 const LinkItem = ({
   item,
   setOpenMenu,
   openMenu,
+  setLinks,
   openEditModal,
   openDetail,
 }: LinkItemProps) => {
+  const baseUrl = useBaseUrl();
+
+  const handleClick = async (): Promise<void> => {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/links/${item.id}`,
+      {
+        method: "DELETE",
+      },
+    );
+
+    if (!res) {
+      throw new Error("Error pada saat fetch");
+    }
+
+    setLinks((prev) => prev.filter((p) => p.id !== item.id));
+  };
+
   return (
     <div
       key={item.id}
@@ -40,7 +62,7 @@ const LinkItem = ({
               <h3 className="font-medium truncate">{item.title}</h3>
 
               <p className="text-sm text-blue-400 truncate">
-                LinkPilot.app/r/{item.slug}
+                {baseUrl}/r/{item.slug}
               </p>
             </div>
           </div>
@@ -68,7 +90,14 @@ const LinkItem = ({
                 label="Detail"
                 onClick={() => openDetail(item)}
               />
-              <MenuItem icon={<BarChart3 size={16} />} label="Analytics" />
+              <Link
+                href={`/analytics/${item.id}`}
+                prefetch={false}
+                scroll={true}
+                className="flex gap-x-2 px-4 hover:bg-white/5 transition py-3 text-sm"
+              >
+                <BarChart3 size={16} /> Analytics
+              </Link>
 
               <MenuItem
                 icon={<Pencil size={16} />}
@@ -76,7 +105,12 @@ const LinkItem = ({
                 onClick={() => openEditModal(item)}
               />
 
-              <MenuItem icon={<Trash2 size={16} />} label="Delete" danger />
+              <MenuItem
+                icon={<Trash2 size={16} />}
+                label="Delete"
+                danger
+                onClick={handleClick}
+              />
             </div>
           )}
         </div>
