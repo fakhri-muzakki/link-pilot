@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Menu, X, Plus, LogOut, Link2 } from "lucide-react";
+import LogoutButton from "../links/components/LogoutButton";
 
 export default function Navbar({
   openCreateModal,
@@ -31,10 +32,7 @@ export default function Navbar({
               </button>
             )}
 
-            <button className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 px-4 py-2 text-sm transition">
-              <LogOut size={16} />
-              Logout
-            </button>
+            <LogoutButton />
           </div>
 
           {/* Mobile Button */}

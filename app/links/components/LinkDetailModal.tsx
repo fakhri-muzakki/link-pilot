@@ -111,7 +111,7 @@ export default function LinkDetailModal({
             </button>
 
             <a
-              href={data.slug}
+              href={`/r/${data.slug}`}
               target="_blank"
               rel="noopener noreferrer"
               className="rounded-xl bg-blue-600 hover:bg-blue-700 py-3 font-medium transition inline-flex items-center justify-center gap-2"

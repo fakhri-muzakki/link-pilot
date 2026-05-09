@@ -7,7 +7,6 @@ import {
   Percent,
   Clock3,
 } from "lucide-react";
-// import { analyticsResponse } from "../data";
 import formatCompact from "../formatCompact";
 import CountriesChart from "./CountriesChart";
 import DevicesChart from "./DevicesChart";

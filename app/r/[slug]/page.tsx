@@ -13,11 +13,6 @@ export default async function ConfirmRedirectPage({ params }: Props) {
 
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/api/links/${slug}`,
-    // {
-    //   headers: {
-    //     Authorization: `Bearer ${session.access_token}`,
-    //   },
-    // },
   );
 
   if (!res) {
