@@ -104,10 +104,22 @@ export default function LinksPage({
 
       const json = await res.json();
 
-      setLinks((prev) => [json.data, ...prev]);
+      const date = new Date(json.data.createdAt);
+
+      const formatted = date.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      });
+
+      setLinks((prev) => [{ ...json.data, createdAt: formatted }, , ...prev]);
     }
 
     // edit mode
+    const slug = values.customAlias
+      ? values.customAlias.replace(/\s+/g, "-")
+      : undefined;
+
     if (modalMode === "edit" && selectedLink) {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/links/${selectedLink.id}`,
@@ -120,7 +132,7 @@ export default function LinksPage({
           body: JSON.stringify({
             title: values.title,
             original_url: values.originalUrl,
-            custom_alias: values.customAlias || "",
+            custom_alias: slug || "",
           }),
         },
       );
@@ -131,7 +143,9 @@ export default function LinksPage({
 
       setLinks((prev) =>
         prev.map((p) => {
-          return p.id == selectedLink.id ? { ...p, ...values } : p;
+          return p.id == selectedLink.id
+            ? { ...p, ...values, slug: slug ?? p.slug }
+            : p;
         }),
       );
     }

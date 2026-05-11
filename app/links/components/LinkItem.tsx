@@ -7,7 +7,6 @@ import {
   Trash2,
 } from "lucide-react";
 import MenuItem from "./MenuItem";
-// import type { LinkItem } from "../type";
 import { useBaseUrl } from "@/hooks/useBaseUrl";
 import type { LinkItem as LinkItemType } from "../type";
 import Link from "next/link";
